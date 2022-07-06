@@ -9,7 +9,8 @@ import Landing  from './Pages/Landing'
 import ProfileLanding  from './Pages/ProfileLanding'
 
 function App() {
-  const { authenticate, isAuthenticated, isAuthenticating, user, account, logout } = useMoralis();
+  const { authenticate, isAuthenticated,isInitialized, isAuthenticating, user, account, logout } = useMoralis();
+
 
   //let name: string = 'd'; eller let name: any = 'd';
 
@@ -45,6 +46,7 @@ function App() {
   //Sick if statmentes in rendering code
   //https://reactjs.org/docs/conditional-rendering.html
   
+  if(isInitialized){
   return (
     <div className="App">
       <header className="App-header">
@@ -56,12 +58,17 @@ function App() {
         <Routes>
           <Route path="/" element={<Landing/>} />
           <Route path="/profile" element={<h1>To</h1>} />
-          <Route path="/u/:slug" element={<ProfileLanding/>} />
+          <Route path="/u/:urlSlug" element={<ProfileLanding/>} />
         </Routes>
 
       </header>
     </div>
   );
+} else {
+  return(
+    <h1>Moralis not initialized</h1>
+  )
+}
 }
 
 export default App;
