@@ -7,6 +7,8 @@ import { useMoralis } from "react-moralis";
 function App() {
   const { authenticate, isAuthenticated, isAuthenticating, user, account, logout } = useMoralis();
 
+  //let name: string = 'd'; eller let name: any = 'd';
+
   //Runs everytime isAuthenticated is changed (and init)
   useEffect(() => {
     if(isAuthenticated){
