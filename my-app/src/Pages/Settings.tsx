@@ -3,25 +3,39 @@ import { useMoralis } from "react-moralis";
 import { Moralis } from "moralis";
 import { useState, useEffect, useRef } from "react";
 
-import { Tooltip, Button, Avatar, InputWrapper, TextInput, Grid, ColorPicker  } from "@mantine/core";
+import {
+  Tooltip,
+  Button,
+  Avatar,
+  InputWrapper,
+  TextInput,
+  Grid,
+  ColorPicker,
+} from "@mantine/core";
 import { Link } from "react-router-dom";
-import { At, AlertCircle, DiscountCheck, GitPullRequestDraft } from "tabler-icons-react";
+import {
+  At,
+  AlertCircle,
+  DiscountCheck,
+  GitPullRequestDraft,
+} from "tabler-icons-react";
 import { storage } from "../firebase";
 import { ref, uploadBytes, listAll, getDownloadURL } from "firebase/storage";
 import { idText } from "typescript";
-import CustomColorPicker  from "../Components/CustomColorPicker" 
-
+import CustomColorPicker from "../Components/CustomColorPicker";
 
 export default function Settings() {
   var currentUser: any = Moralis.User.current();
   var userAddr = currentUser.get("ethAddress");
   const [userSlug, setUserSlug] = useState("");
+  const [userDisplayName, setDisplayName] = useState("A display name");
+  const [userDescription, setDescription] = useState("A description");
   const [instanceSlug, setInstanceSlug]: any = useState();
 
   const [selectedHeroFile, setHeroSelectedFile]: any = useState(null);
   const [selectedPfpFile, setPfpSelectedFile]: any = useState(null);
   const [imagePfp, setImagePfp]: any = useState();
-  const [imageHero, setImageHero]: any = useState()
+  const [imageHero, setImageHero]: any = useState();
   const imageHeroRef = ref(storage, `users/${userAddr}/hero`);
   const imagePfpRef = ref(storage, `users/${userAddr}/pfp`);
 
@@ -55,6 +69,8 @@ export default function Settings() {
     const results: any = await fetch();
     if (!(results?.length == 0)) {
       setUserSlug(results[0].get("slug"));
+      setDescription(results[0].get("description"));
+      setDisplayName(results[0].get("displayName"));
       setInstanceSlug(results[0]);
     }
     return results;
@@ -73,6 +89,8 @@ export default function Settings() {
   const saveObject = async () => {
     const data = {
       owner: userAddr,
+      displayName: userDisplayName,
+      description: userDescription,
       slug: userSlug,
     };
 
@@ -89,6 +107,8 @@ export default function Settings() {
   //UPDATE LOGIC
   const updateObject = async () => {
     instanceSlug.set("slug", userSlug);
+    instanceSlug.set("description", userDescription);
+    instanceSlug.set("displayName", userDisplayName);
     instanceSlug.save();
   };
 
@@ -99,10 +119,13 @@ export default function Settings() {
 
   const HeroFileUploadhandler = () => {
     if (selectedHeroFile == null) return;
+
     const imgRef = ref(storage, `users/${userAddr}/hero/hero`);
-    uploadBytes(imgRef, selectedHeroFile).then(() => {
+    uploadBytes(imgRef, selectedHeroFile).then((snapshot) => {
       //run after upload
-      alert("Image uploaded");
+      getDownloadURL(snapshot.ref).then((url) => {
+        setImageHero(url)
+      })
     });
   };
 
@@ -113,14 +136,16 @@ export default function Settings() {
   const PfpFileUploadhandler = () => {
     if (selectedPfpFile == null) return;
     const imgRef = ref(storage, `users/${userAddr}/pfp/pfp`);
-    uploadBytes(imgRef, selectedPfpFile).then(() => {
+    uploadBytes(imgRef, selectedPfpFile).then((snapshot) => {
       //run after upload
-      alert("Image uploaded");
+      getDownloadURL(snapshot.ref).then((url) => {
+        setImagePfp(url)
+      })
     });
   };
 
   return (
-    <div style={{ backgroundColor: "white"}}>
+    <div style={{ backgroundColor: "white" }}>
       <Grid grow>
         <Grid.Col span={3}>
           <div
@@ -130,144 +155,138 @@ export default function Settings() {
               color: "white",
             }}
           >
-            {imageHero != null &&
-            <div >
-              <img style={{ objectFit: "cover", height: "100vh", width: "100%"}} src={imageHero} width="100%"  />
-            </div>
-            }
-
+            {imageHero != null && (
+              <div>
+                <img
+                  style={{ objectFit: "cover", height: "100vh", width: "100%" }}
+                  src={imageHero}
+                  width="100%"
+                />
+              </div>
+            )}
           </div>
         </Grid.Col>
         <Grid.Col span={5}>
-        <div
-              style={{
-                display: "flex",
-                textAlign: "left",
-                marginTop: "10vh",
-                alignContent: "center",
-                justifyContent: "center",
-              }}
-            >
-              <div style={{ marginRight: "25px" }}>
-                {imagePfp != null && (
-                  <Avatar
-                    src={imagePfp}
-                    alt="Pfp"
-                    size="xl"
-                    radius="xl"
-                  ></Avatar>
-                )}
-              </div>
+          <div
+            style={{
+              display: "flex",
+              textAlign: "left",
+              marginTop: "10vh",
+              alignContent: "center",
+              justifyContent: "center",
+            }}
+          >
+            <div style={{ marginRight: "25px" }}>
+              {imagePfp != null && (
+                <Avatar src={imagePfp} alt="Pfp" size="xl" radius="xl"></Avatar>
+              )}
+            </div>
+            <div>
               <div>
-                <div>
-                  <div style={{display:"flex"}}>
-                    <h1 style={{ margin: "0px" }}>{userSlug}</h1>
-                    <div style={{ marginTop: "5px", marginLeft: "10px" }}>
-                      <DiscountCheck fill="green" color="white" size={40} />
-                    </div>
+                <div style={{ display: "flex" }}>
+                  <h1 style={{ margin: "0px" }}>{userSlug}</h1>
+                  <div style={{ marginTop: "5px", marginLeft: "10px" }}>
+                    <DiscountCheck fill="green" color="white" size={40} />
                   </div>
-                  <p style={{ margin: "0px" }}>{userAddr}</p>
                 </div>
+                <p style={{ margin: "0px" }}>{userAddr}</p>
               </div>
             </div>
-
+          </div>
 
           {/* Ting under profil */}
           <div>
-            
-          <label>Slug: </label>
-          <input
-            id="fslug"
-            type="text"
-            value={userSlug}
-            onChange={(e) => setUserSlug(e.target.value)}
-          />
+            <label>Slug: </label>
+            <input
+              id="fslug"
+              type="text"
+              value={userSlug}
+              onChange={(e) => setUserSlug(e.target.value)}
+            />
           </div>
 
-          <div style={{ width: "30%", textAlign: "left" }}>
-            <InputWrapper label="Input Slug">
-              <TextInput
-                icon={<At />}
-                placeholder="Your email"
-                styles={{ rightSection: { pointerEvents: "none" } }}
-                rightSection={
-                  <Tooltip
-                    label="We do not send spam"
-                    position="top"
-                    placement="end"
-                  >
-                    <AlertCircle
-                      size={16}
-                      style={{ display: "block", opacity: 0.5 }}
-                    />
-                  </Tooltip>
-                }
-              />
-            </InputWrapper>
+          <div style={{ display: "flex", justifyContent: "center" }}>
+            <div style={{ textAlign: "left" }}>
+              <InputWrapper label="Input Slug">
+                <TextInput
+                  icon={<At />}
+                  placeholder="Your email"
+                  styles={{ rightSection: { pointerEvents: "none" } }}
+                  rightSection={
+                    <Tooltip
+                      label="We do not send spam"
+                      position="top"
+                      placement="end"
+                    >
+                      <AlertCircle
+                        size={16}
+                        style={{ display: "block", opacity: 0.5 }}
+                      />
+                    </Tooltip>
+                  }
+                />
+              </InputWrapper>
 
-            <InputWrapper label="Input Display name">
-              <TextInput
-                icon={<At />}
-                placeholder="Your email"
-                styles={{ rightSection: { pointerEvents: "none" } }}
-                rightSection={
-                  <Tooltip
-                    label="We do not send spam"
-                    position="top"
-                    placement="end"
-                  >
-                    <AlertCircle
-                      size={16}
-                      style={{ display: "block", opacity: 0.5 }}
-                    />
-                  </Tooltip>
-                }
-              />
-            </InputWrapper>
+              <InputWrapper label="Input Display name">
+                <TextInput
+                  icon={<At />}
+                  placeholder="Your email"
+                  styles={{ rightSection: { pointerEvents: "none" } }}
+                  rightSection={
+                    <Tooltip
+                      label="We do not send spam"
+                      position="top"
+                      placement="end"
+                    >
+                      <AlertCircle
+                        size={16}
+                        style={{ display: "block", opacity: 0.5 }}
+                      />
+                    </Tooltip>
+                  }
+                />
+              </InputWrapper>
 
-            <InputWrapper label="Input Display description">
-              <TextInput
-                icon={<At />}
-                placeholder="Your email"
-                styles={{ rightSection: { pointerEvents: "none" } }}
-                rightSection={
-                  <Tooltip
-                    label="We do not send spam"
-                    position="top"
-                    placement="end"
-                  >
-                    <AlertCircle
-                      size={16}
-                      style={{ display: "block", opacity: 0.5 }}
-                    />
-                  </Tooltip>
-                }
-              />
-            </InputWrapper>
+              <InputWrapper label="Input Display description">
+                <TextInput
+                  icon={<At />}
+                  placeholder="Your email"
+                  styles={{ rightSection: { pointerEvents: "none" } }}
+                  rightSection={
+                    <Tooltip
+                      label="We do not send spam"
+                      position="top"
+                      placement="end"
+                    >
+                      <AlertCircle
+                        size={16}
+                        style={{ display: "block", opacity: 0.5 }}
+                      />
+                    </Tooltip>
+                  }
+                />
+              </InputWrapper>
 
-            <p>Hero</p>
-            <input type="file" onChange={heroFileSlectedHandler}></input>
-            <Button onClick={HeroFileUploadhandler}>Upload file</Button>
+              <p>Hero</p>
+              <input type="file" onChange={heroFileSlectedHandler}></input>
+              <Button onClick={HeroFileUploadhandler}>Upload file</Button>
 
-            <p>Pfp</p>
-            <input type="file" onChange={pfpFileSlectedHandler}></input>
-            <Button onClick={PfpFileUploadhandler}>Upload file</Button>
+              <p>Pfp</p>
+              <input type="file" onChange={pfpFileSlectedHandler}></input>
+              <Button onClick={PfpFileUploadhandler}>Upload file</Button>
+
+              <p>Background color picker</p>
+              <CustomColorPicker></CustomColorPicker>
+
+              <br />
+              <br />
+              <Button onClick={checkDupes}>Save Profile</Button>
+              <Button onClick={updateObject}>Update Profile</Button>
+              <Link to={"/u/" + userSlug}>
+                <Button>View Profile</Button>
+              </Link>
+            </div>
           </div>
-          <br></br>
-
-          <p>Background color picker</p>
-          <CustomColorPicker></CustomColorPicker>
-          <br />
-          <br />
-          <Button onClick={updateObject}>Update Profile</Button>
-          <Link to={"/u/" + userSlug}>
-            <Button>View Profile</Button>
-          </Link>
-
-          {/* {imageList != null &&
-            imageList.map((url: any) => {
-              return <img src={url} />;
-            })} */}
         </Grid.Col>
       </Grid>
     </div>
