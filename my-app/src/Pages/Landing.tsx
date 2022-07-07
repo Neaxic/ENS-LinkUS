@@ -47,6 +47,16 @@ export default function Landing() {
     // sx={(theme) => ({backgroundColor: theme.colors.grayWhite[0]})
     <div>
       <h1>Hello</h1>
+      <NavLink to="u/1CY">
+          <Button
+            variant="gradient"
+            gradient={{ from: "orange", to: "red" }}
+            leftIcon={<UserCircle />}
+            sx={{ marginRight: 12 }}
+          >
+            Demo Profile
+          </Button>
+        </NavLink>
       {isAuthenticated && (
         <NavLink to="Settings">
           <Button
