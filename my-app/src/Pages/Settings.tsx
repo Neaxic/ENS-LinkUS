@@ -3,12 +3,14 @@ import { useMoralis } from "react-moralis";
 import { Moralis } from "moralis";
 import { useState, useEffect, useRef } from "react";
 
-import { Tooltip, Button, Avatar, InputWrapper, TextInput, Grid } from "@mantine/core";
+import { Tooltip, Button, Avatar, InputWrapper, TextInput, Grid, ColorPicker  } from "@mantine/core";
 import { Link } from "react-router-dom";
 import { At, AlertCircle, DiscountCheck, GitPullRequestDraft } from "tabler-icons-react";
 import { storage } from "../firebase";
 import { ref, uploadBytes, listAll, getDownloadURL } from "firebase/storage";
 import { idText } from "typescript";
+import CustomColorPicker  from "../Components/CustomColorPicker" 
+
 
 export default function Settings() {
   var currentUser: any = Moralis.User.current();
@@ -118,7 +120,7 @@ export default function Settings() {
   };
 
   return (
-    <div>
+    <div style={{ backgroundColor: "white"}}>
       <Grid grow>
         <Grid.Col span={3}>
           <div
@@ -129,8 +131,8 @@ export default function Settings() {
             }}
           >
             {imageHero != null &&
-            <div>
-              <img src={imageHero} width="100%" />
+            <div >
+              <img style={{ objectFit: "cover", height: "100vh", width: "100%"}} src={imageHero} width="100%"  />
             </div>
             }
 
@@ -251,11 +253,12 @@ export default function Settings() {
             <input type="file" onChange={pfpFileSlectedHandler}></input>
             <Button onClick={PfpFileUploadhandler}>Upload file</Button>
           </div>
+          <br></br>
 
+          <p>Background color picker</p>
+          <CustomColorPicker></CustomColorPicker>
           <br />
           <br />
-          <Button onClick={basicQuery}>Check Profile</Button>
-          <Button onClick={checkDupes}>Create Profile</Button>
           <Button onClick={updateObject}>Update Profile</Button>
           <Link to={"/u/" + userSlug}>
             <Button>View Profile</Button>

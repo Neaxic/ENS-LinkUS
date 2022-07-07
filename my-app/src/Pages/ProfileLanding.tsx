@@ -72,7 +72,7 @@ export default function Landing() {
           >
             {imageHero != null && (
               <div>
-                <img src={imageHero} width="100%" />
+                <img style={{ objectFit: "cover", height: "100vh", width: "100%"}} src={imageHero} width="100%" />
               </div>
             )}
           </div>
@@ -98,7 +98,7 @@ export default function Landing() {
                   ></Avatar>
                 )}
               </div>
-              <div>
+              <div style={{marginTop: "-15px"}}>
                 <div>
                   <div style={{display:"flex"}}>
                     <h1 style={{ margin: "0px" }}>{urlSlug}</h1>
@@ -108,6 +108,32 @@ export default function Landing() {
                   </div>
                   <p style={{ margin: "0px" }}>{ownerAddr}</p>
                 </div>
+                  <div style={{display: "flex", marginTop: "-15px"}}>
+                    <div style={{display: "flex"}}>
+                      <p>BAYC</p>
+                      <div style={{ marginTop: "19px", marginLeft: "2px" }}>
+                        <DiscountCheck fill="green" color="white" size={20} />
+                      </div>
+                    </div>
+                    <div style={{display: "flex", marginLeft: "10px"}}>
+                      <p>MAYC</p>
+                      <div style={{ marginTop: "19px", marginLeft: "2px" }}>
+                        <DiscountCheck fill="green" color="white" size={20} />
+                      </div>
+                    </div>
+                    <div style={{display: "flex", marginLeft: "10px"}}>
+                      <p>RTFKT</p>
+                      <div style={{ marginTop: "19px", marginLeft: "2px" }}>
+                        <DiscountCheck fill="green" color="white" size={20} />
+                      </div>
+                    </div>
+                    <div style={{display: "flex", marginLeft: "10px"}}>
+                      <p>DOODLE</p>
+                      <div style={{ marginTop: "19px", marginLeft: "2px" }}>
+                        <DiscountCheck fill="green" color="white" size={20} />
+                      </div>
+                    </div>
+                  </div>
               </div>
             </div>
 
