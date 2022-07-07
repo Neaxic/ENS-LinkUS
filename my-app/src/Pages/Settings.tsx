@@ -10,6 +10,7 @@ import {
   InputWrapper,
   TextInput,
   Grid,
+  ColorInput,
   ColorPicker,
 } from "@mantine/core";
 import { Link } from "react-router-dom";
@@ -23,6 +24,7 @@ import { storage } from "../firebase";
 import { ref, uploadBytes, listAll, getDownloadURL } from "firebase/storage";
 import { idText } from "typescript";
 import CustomColorPicker from "../Components/CustomColorPicker";
+import CustomCollectionSelector from "../Components/CollectionSelector";
 
 export default function Settings() {
   var currentUser: any = Moralis.User.current();
@@ -32,12 +34,16 @@ export default function Settings() {
   const [userDescription, setDescription] = useState("A description");
   const [instanceSlug, setInstanceSlug]: any = useState();
 
+  //Image shit
   const [selectedHeroFile, setHeroSelectedFile]: any = useState(null);
   const [selectedPfpFile, setPfpSelectedFile]: any = useState(null);
   const [imagePfp, setImagePfp]: any = useState();
   const [imageHero, setImageHero]: any = useState();
   const imageHeroRef = ref(storage, `users/${userAddr}/hero`);
   const imagePfpRef = ref(storage, `users/${userAddr}/pfp`);
+
+  //Collection Selector
+  const [selectedCollections, setSelectedCollections]: any = useState(null);
 
   //Fetch myself
   const { fetch } = useMoralisQuery(
@@ -124,8 +130,8 @@ export default function Settings() {
     uploadBytes(imgRef, selectedHeroFile).then((snapshot) => {
       //run after upload
       getDownloadURL(snapshot.ref).then((url) => {
-        setImageHero(url)
-      })
+        setImageHero(url);
+      });
     });
   };
 
@@ -139,8 +145,8 @@ export default function Settings() {
     uploadBytes(imgRef, selectedPfpFile).then((snapshot) => {
       //run after upload
       getDownloadURL(snapshot.ref).then((url) => {
-        setImagePfp(url)
-      })
+        setImagePfp(url);
+      });
     });
   };
 
@@ -175,7 +181,8 @@ export default function Settings() {
               alignContent: "center",
               justifyContent: "center",
             }}
-          >
+            >
+
             <div style={{ marginRight: "25px" }}>
               {imagePfp != null && (
                 <Avatar src={imagePfp} alt="Pfp" size="xl" radius="xl"></Avatar>
@@ -184,18 +191,48 @@ export default function Settings() {
             <div>
               <div>
                 <div style={{ display: "flex" }}>
-                  <h1 style={{ margin: "0px" }}>{userSlug}</h1>
+                  <h1 style={{ margin: "0px" }}>{userDisplayName}</h1>
                   <div style={{ marginTop: "5px", marginLeft: "10px" }}>
                     <DiscountCheck fill="green" color="white" size={40} />
                   </div>
                 </div>
                 <p style={{ margin: "0px" }}>{userAddr}</p>
               </div>
+              <div style={{ display: "flex", marginTop: "-15px" }}>
+                <div style={{ display: "flex" }}>
+                  <p>BAYC</p>
+                  <div style={{ marginTop: "19px", marginLeft: "2px" }}>
+                    <DiscountCheck fill="green" color="white" size={20} />
+                  </div>
+                </div>
+                <div style={{ display: "flex", marginLeft: "10px" }}>
+                  <p>MAYC</p>
+                  <div style={{ marginTop: "19px", marginLeft: "2px" }}>
+                    <DiscountCheck fill="green" color="white" size={20} />
+                  </div>
+                </div>
+                <div style={{ display: "flex", marginLeft: "10px" }}>
+                  <p>RTFKT</p>
+                  <div style={{ marginTop: "19px", marginLeft: "2px" }}>
+                    <DiscountCheck fill="green" color="white" size={20} />
+                  </div>
+                </div>
+                <div style={{ display: "flex", marginLeft: "10px" }}>
+                  <p>DOODLE</p>
+                  <div style={{ marginTop: "19px", marginLeft: "2px" }}>
+                    <DiscountCheck fill="green" color="white" size={20} />
+                  </div>
+                </div>
+              </div>
+              <div>
+                <p style={{ margin: "0px" }}>{userDescription}</p>
+              </div>
             </div>
           </div>
 
+
           {/* Ting under profil */}
-          <div>
+          {/* <div>
             <label>Slug: </label>
             <input
               id="fslug"
@@ -203,14 +240,16 @@ export default function Settings() {
               value={userSlug}
               onChange={(e) => setUserSlug(e.target.value)}
             />
-          </div>
+          </div> */}
 
-          <div style={{ display: "flex", justifyContent: "center" }}>
-            <div style={{ textAlign: "left" }}>
+          <div style={{ display: "flex", marginTop:"4%", justifyContent: "center" }}>
+            <div style={{ textAlign: "left", maxWidth: "70%" }}>
               <InputWrapper label="Input Slug">
                 <TextInput
                   icon={<At />}
-                  placeholder="Your email"
+                  placeholder="Your profile slug"
+                  value={userSlug}
+                  onChange={(e) => setUserSlug(e.target.value)}
                   styles={{ rightSection: { pointerEvents: "none" } }}
                   rightSection={
                     <Tooltip
@@ -230,7 +269,9 @@ export default function Settings() {
               <InputWrapper label="Input Display name">
                 <TextInput
                   icon={<At />}
-                  placeholder="Your email"
+                  placeholder="Your profile display name"
+                  value={userDisplayName}
+                  onChange={(e) => setDisplayName(e.target.value)}
                   styles={{ rightSection: { pointerEvents: "none" } }}
                   rightSection={
                     <Tooltip
@@ -251,6 +292,8 @@ export default function Settings() {
                 <TextInput
                   icon={<At />}
                   placeholder="Your email"
+                  value={userDescription}
+                  onChange={(e) => setDescription(e.target.value)}
                   styles={{ rightSection: { pointerEvents: "none" } }}
                   rightSection={
                     <Tooltip
@@ -266,6 +309,13 @@ export default function Settings() {
                   }
                 />
               </InputWrapper>
+
+              <div >
+                <p>Your wallets confirmed collections</p>
+                <p>Select what collection your want to display (max 5)</p>
+                <CustomCollectionSelector selectedCollections={selectedCollections}></CustomCollectionSelector>
+                <Button onClick={() => console.log(selectedCollections)}></Button>
+              </div>
 
               <p>Hero</p>
               <input type="file" onChange={heroFileSlectedHandler}></input>

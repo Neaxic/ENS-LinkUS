@@ -16,6 +16,8 @@ import { ref, listAll, getDownloadURL } from "firebase/storage";
 export default function Landing() {
   let { urlSlug } = useParams();
   const [ownerAddr, setOwnerAddr] = useState("");
+  const [ownerDisplayName, setOwnerDisplayName] = useState("");
+  const [description, setDescription] = useState("");
   const [imagePfp, setImagePfp]: any = useState();
   const [imageHero, setImageHero]: any = useState();
 
@@ -55,6 +57,8 @@ export default function Landing() {
     const results: any = await fetch();
     if (!(results?.length == 0)) {
       setOwnerAddr(results[0].get("owner"));
+      setOwnerDisplayName(results[0].get("displayName"));
+      setDescription(results[0].get("description"));
     }
     return results;
   };
@@ -72,7 +76,11 @@ export default function Landing() {
           >
             {imageHero != null && (
               <div>
-                <img style={{ objectFit: "cover", height: "100vh", width: "100%"}} src={imageHero} width="100%" />
+                <img
+                  style={{ objectFit: "cover", height: "100vh", width: "100%" }}
+                  src={imageHero}
+                  width="100%"
+                />
               </div>
             )}
           </div>
@@ -98,43 +106,47 @@ export default function Landing() {
                   ></Avatar>
                 )}
               </div>
-              <div style={{marginTop: "-15px"}}>
+              <div style={{ marginTop: "-15px" }}>
                 <div>
-                  <div style={{display:"flex"}}>
-                    <h1 style={{ margin: "0px" }}>{urlSlug}</h1>
+                  <div style={{ display: "flex" }}>
+                    <h1 style={{ margin: "0px" }}>{ownerDisplayName}</h1>
                     <div style={{ marginTop: "5px", marginLeft: "10px" }}>
                       <DiscountCheck fill="green" color="white" size={40} />
                     </div>
                   </div>
                   <p style={{ margin: "0px" }}>{ownerAddr}</p>
                 </div>
-                  <div style={{display: "flex", marginTop: "-15px"}}>
-                    <div style={{display: "flex"}}>
-                      <p>BAYC</p>
-                      <div style={{ marginTop: "19px", marginLeft: "2px" }}>
-                        <DiscountCheck fill="green" color="white" size={20} />
-                      </div>
-                    </div>
-                    <div style={{display: "flex", marginLeft: "10px"}}>
-                      <p>MAYC</p>
-                      <div style={{ marginTop: "19px", marginLeft: "2px" }}>
-                        <DiscountCheck fill="green" color="white" size={20} />
-                      </div>
-                    </div>
-                    <div style={{display: "flex", marginLeft: "10px"}}>
-                      <p>RTFKT</p>
-                      <div style={{ marginTop: "19px", marginLeft: "2px" }}>
-                        <DiscountCheck fill="green" color="white" size={20} />
-                      </div>
-                    </div>
-                    <div style={{display: "flex", marginLeft: "10px"}}>
-                      <p>DOODLE</p>
-                      <div style={{ marginTop: "19px", marginLeft: "2px" }}>
-                        <DiscountCheck fill="green" color="white" size={20} />
-                      </div>
+                <div style={{ display: "flex", marginTop: "-15px" }}>
+                  <div style={{ display: "flex" }}>
+                    <p>BAYC</p>
+                    <div style={{ marginTop: "19px", marginLeft: "2px" }}>
+                      <DiscountCheck fill="green" color="white" size={20} />
                     </div>
                   </div>
+                  <div style={{ display: "flex", marginLeft: "10px" }}>
+                    <p>MAYC</p>
+                    <div style={{ marginTop: "19px", marginLeft: "2px" }}>
+                      <DiscountCheck fill="green" color="white" size={20} />
+                    </div>
+                  </div>
+                  <div style={{ display: "flex", marginLeft: "10px" }}>
+                    <p>RTFKT</p>
+                    <div style={{ marginTop: "19px", marginLeft: "2px" }}>
+                      <DiscountCheck fill="green" color="white" size={20} />
+                    </div>
+                  </div>
+                  <div style={{ display: "flex", marginLeft: "10px" }}>
+                    <p>DOODLE</p>
+                    <div style={{ marginTop: "19px", marginLeft: "2px" }}>
+                      <DiscountCheck fill="green" color="white" size={20} />
+                    </div>
+                  </div>
+                </div>
               </div>
+            </div>
+
+            <div style={{ textAlign: "left" }}>
+              <p style={{ margin: "0px" }}>{description}</p>
             </div>
 
             <div style={{ display: "block", marginTop: "60px" }}>
@@ -144,7 +156,7 @@ export default function Landing() {
                   target="_blank"
                   size="xl"
                   rel="noopener noreferrer"
-                  href="https://twitter.com/mantinedev"
+                  href="https://twitter.com/1CYETH"
                   leftIcon={<BrandTwitter size={25} />}
                   styles={(theme) => ({
                     root: {
