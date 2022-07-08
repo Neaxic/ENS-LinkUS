@@ -27,6 +27,8 @@ export default function LinksSelector({
     { value: "Twitter", label: "Twitter" },
     { value: "Youtube", label: "Youtube" },
     { value: "Discord", label: "Discord" },
+    { value: "Intagram", label: "Intagram" },
+    { value: "Tiktok", label: "Tiktok" },
     { value: "Spotify", label: "Spotify" },
   ];
 
@@ -56,7 +58,6 @@ export default function LinksSelector({
         <MultiSelect
           data={data}
           limit={10}
-          defaultValue={["opensea", "twitter"]}
           searchable
           clearButtonLabel="Clear selection"
           clearable

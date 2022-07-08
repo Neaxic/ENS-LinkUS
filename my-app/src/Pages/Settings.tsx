@@ -52,10 +52,6 @@ export default function Settings() {
   };
 
   const[linksArr, setlinksArr]:any = useState([])
-  const linksObj = {
-    type: "Twitter",
-    link: "www.twitter.com/1CYETH",
-  };
 
   //Fetch myself
   const { fetch } = useMoralisQuery(
@@ -66,7 +62,11 @@ export default function Settings() {
   );
 
   useEffect(() => {
-    basicQuery();
+    basicQuery().then(value => {
+      sortSelectedLinks();
+    }, reason => {
+      alert(reason)
+    });
     listAll(imageHeroRef).then((resp) => {
       resp.items.forEach((item) => {
         getDownloadURL(item).then((url) => {
@@ -83,6 +83,15 @@ export default function Settings() {
     });
   }, []);
 
+  const sortSelectedLinks = () =>{
+    var tmpArr:any = [];
+    linksArr.forEach((element:any) => {
+      tmpArr.push(element)
+    });
+    console.log(tmpArr)
+    setSelectedLinks(tmpArr)
+  }
+
   const basicQuery = async () => {
     const results: any = await fetch();
     if (!(results?.length == 0)) {
@@ -92,8 +101,6 @@ export default function Settings() {
       setSelectedCollections(results[0].get("collections"));
       setSelectedBGColor(results[0].get("colors")[0].bgcolor);
       setSelectedTextColor(results[0].get("colors")[0].textColor);
-      console.log("from DB:")
-      console.log(results[0].get("links"))
       setlinksArr(results[0].get("links"))
       setInstanceSlug(results[0]);
     }

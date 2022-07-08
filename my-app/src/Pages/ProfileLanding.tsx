@@ -42,6 +42,14 @@ export default function Landing() {
       type: "Opensea",
       color: "#2081E2",
       icon: "CurrencyEthereum",
+    },{
+      type: "Instagram",
+      color: "#EF0075",
+      icon: "CurrencyEthereum",
+    },{
+      type: "Tiktok",
+      color: "#000000",
+      icon: "CurrencyEthereum",
     },
     {
       type: "Discord",
