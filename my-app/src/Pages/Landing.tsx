@@ -47,6 +47,9 @@ export default function Landing() {
     // sx={(theme) => ({backgroundColor: theme.colors.grayWhite[0]})
     <div>
       <h1>Hello</h1>
+
+    
+
       <NavLink to="u/1CY">
           <Button
             variant="gradient"

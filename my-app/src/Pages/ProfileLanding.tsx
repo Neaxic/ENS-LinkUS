@@ -20,6 +20,7 @@ export default function Landing() {
   const [description, setDescription] = useState("");
   const [imagePfp, setImagePfp]: any = useState();
   const [imageHero, setImageHero]: any = useState();
+  const [selectedCollections, setSelectedCollections]: any = useState();
 
   useEffect(() => {
     basicQuery();
@@ -59,6 +60,7 @@ export default function Landing() {
       setOwnerAddr(results[0].get("owner"));
       setOwnerDisplayName(results[0].get("displayName"));
       setDescription(results[0].get("description"));
+      setSelectedCollections(results[0].get("collections"));
     }
     return results;
   };
@@ -117,30 +119,16 @@ export default function Landing() {
                   <p style={{ margin: "0px" }}>{ownerAddr}</p>
                 </div>
                 <div style={{ display: "flex", marginTop: "-15px" }}>
-                  <div style={{ display: "flex" }}>
-                    <p>BAYC</p>
-                    <div style={{ marginTop: "19px", marginLeft: "2px" }}>
-                      <DiscountCheck fill="green" color="white" size={20} />
-                    </div>
-                  </div>
-                  <div style={{ display: "flex", marginLeft: "10px" }}>
-                    <p>MAYC</p>
-                    <div style={{ marginTop: "19px", marginLeft: "2px" }}>
-                      <DiscountCheck fill="green" color="white" size={20} />
-                    </div>
-                  </div>
-                  <div style={{ display: "flex", marginLeft: "10px" }}>
-                    <p>RTFKT</p>
-                    <div style={{ marginTop: "19px", marginLeft: "2px" }}>
-                      <DiscountCheck fill="green" color="white" size={20} />
-                    </div>
-                  </div>
-                  <div style={{ display: "flex", marginLeft: "10px" }}>
-                    <p>DOODLE</p>
-                    <div style={{ marginTop: "19px", marginLeft: "2px" }}>
-                      <DiscountCheck fill="green" color="white" size={20} />
-                    </div>
-                  </div>
+                  {selectedCollections?.map((e: any) => {
+                    return (
+                      <div style={{ display: "flex", marginRight: "10px" }}>
+                        <p>{e}</p>
+                        <div style={{ marginTop: "19px", marginLeft: "2px" }}>
+                          <DiscountCheck fill="green" color="white" size={20} />
+                        </div>
+                      </div>
+                    );
+                  })}
                 </div>
               </div>
             </div>

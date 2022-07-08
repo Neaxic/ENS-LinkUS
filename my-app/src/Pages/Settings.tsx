@@ -9,6 +9,7 @@ import {
   Avatar,
   InputWrapper,
   TextInput,
+  Accordion,
   Grid,
   ColorInput,
   ColorPicker,
@@ -77,6 +78,7 @@ export default function Settings() {
       setUserSlug(results[0].get("slug"));
       setDescription(results[0].get("description"));
       setDisplayName(results[0].get("displayName"));
+      setSelectedCollections(results[0].get("collections"));
       setInstanceSlug(results[0]);
     }
     return results;
@@ -115,6 +117,7 @@ export default function Settings() {
     instanceSlug.set("slug", userSlug);
     instanceSlug.set("description", userDescription);
     instanceSlug.set("displayName", userDisplayName);
+    instanceSlug.set("collections", selectedCollections);
     instanceSlug.save();
   };
 
@@ -181,8 +184,7 @@ export default function Settings() {
               alignContent: "center",
               justifyContent: "center",
             }}
-            >
-
+          >
             <div style={{ marginRight: "25px" }}>
               {imagePfp != null && (
                 <Avatar src={imagePfp} alt="Pfp" size="xl" radius="xl"></Avatar>
@@ -199,37 +201,22 @@ export default function Settings() {
                 <p style={{ margin: "0px" }}>{userAddr}</p>
               </div>
               <div style={{ display: "flex", marginTop: "-15px" }}>
-                <div style={{ display: "flex" }}>
-                  <p>BAYC</p>
-                  <div style={{ marginTop: "19px", marginLeft: "2px" }}>
-                    <DiscountCheck fill="green" color="white" size={20} />
-                  </div>
-                </div>
-                <div style={{ display: "flex", marginLeft: "10px" }}>
-                  <p>MAYC</p>
-                  <div style={{ marginTop: "19px", marginLeft: "2px" }}>
-                    <DiscountCheck fill="green" color="white" size={20} />
-                  </div>
-                </div>
-                <div style={{ display: "flex", marginLeft: "10px" }}>
-                  <p>RTFKT</p>
-                  <div style={{ marginTop: "19px", marginLeft: "2px" }}>
-                    <DiscountCheck fill="green" color="white" size={20} />
-                  </div>
-                </div>
-                <div style={{ display: "flex", marginLeft: "10px" }}>
-                  <p>DOODLE</p>
-                  <div style={{ marginTop: "19px", marginLeft: "2px" }}>
-                    <DiscountCheck fill="green" color="white" size={20} />
-                  </div>
-                </div>
+                {selectedCollections?.map((e: any) => {
+                  return (
+                    <div style={{ display: "flex", marginRight: "10px" }}>
+                      <p>{e}</p>
+                      <div style={{ marginTop: "19px", marginLeft: "2px" }}>
+                        <DiscountCheck fill="green" color="white" size={20} />
+                      </div>
+                    </div>
+                  );
+                })}
               </div>
               <div>
                 <p style={{ margin: "0px" }}>{userDescription}</p>
               </div>
             </div>
           </div>
-
 
           {/* Ting under profil */}
           {/* <div>
@@ -242,99 +229,109 @@ export default function Settings() {
             />
           </div> */}
 
-          <div style={{ display: "flex", marginTop:"4%", justifyContent: "center" }}>
-            <div style={{ textAlign: "left", maxWidth: "70%" }}>
-              <InputWrapper label="Input Slug">
-                <TextInput
-                  icon={<At />}
-                  placeholder="Your profile slug"
-                  value={userSlug}
-                  onChange={(e) => setUserSlug(e.target.value)}
-                  styles={{ rightSection: { pointerEvents: "none" } }}
-                  rightSection={
-                    <Tooltip
-                      label="We do not send spam"
-                      position="top"
-                      placement="end"
-                    >
-                      <AlertCircle
-                        size={16}
-                        style={{ display: "block", opacity: 0.5 }}
-                      />
-                    </Tooltip>
-                  }
-                />
-              </InputWrapper>
+          <div
+            style={{
+              display: "flex",
+              marginTop: "4%",
+              justifyContent: "center",
+            }}
+          >
+            <div style={{ textAlign: "left", width: "60%" }}>
+              <Accordion>
+                <Accordion.Item label="Customization">
+                  <InputWrapper
+                    label="Input Slug"
+                    description="Please enter the URL slug you want to link your profile to"
+                  >
+                    <TextInput
+                      icon={<At />}
+                      placeholder="Your profile slug"
+                      value={userSlug}
+                      onChange={(e) => setUserSlug(e.target.value)}
+                      styles={{ rightSection: { pointerEvents: "none" } }}
+                    />
+                  </InputWrapper>
 
-              <InputWrapper label="Input Display name">
-                <TextInput
-                  icon={<At />}
-                  placeholder="Your profile display name"
-                  value={userDisplayName}
-                  onChange={(e) => setDisplayName(e.target.value)}
-                  styles={{ rightSection: { pointerEvents: "none" } }}
-                  rightSection={
-                    <Tooltip
-                      label="We do not send spam"
-                      position="top"
-                      placement="end"
-                    >
-                      <AlertCircle
-                        size={16}
-                        style={{ display: "block", opacity: 0.5 }}
-                      />
-                    </Tooltip>
-                  }
-                />
-              </InputWrapper>
+                  <InputWrapper label="Input Display name">
+                    <TextInput
+                      icon={<At />}
+                      placeholder="Your profile display name"
+                      value={userDisplayName}
+                      onChange={(e) => setDisplayName(e.target.value)}
+                      styles={{ rightSection: { pointerEvents: "none" } }}
+                      rightSection={
+                        <Tooltip
+                          label="We do not send spam"
+                          position="top"
+                          placement="end"
+                        >
+                          <AlertCircle
+                            size={16}
+                            style={{ display: "block", opacity: 0.5 }}
+                          />
+                        </Tooltip>
+                      }
+                    />
+                  </InputWrapper>
 
-              <InputWrapper label="Input Display description">
-                <TextInput
-                  icon={<At />}
-                  placeholder="Your email"
-                  value={userDescription}
-                  onChange={(e) => setDescription(e.target.value)}
-                  styles={{ rightSection: { pointerEvents: "none" } }}
-                  rightSection={
-                    <Tooltip
-                      label="We do not send spam"
-                      position="top"
-                      placement="end"
-                    >
-                      <AlertCircle
-                        size={16}
-                        style={{ display: "block", opacity: 0.5 }}
-                      />
-                    </Tooltip>
-                  }
-                />
-              </InputWrapper>
+                  <InputWrapper label="Input Display description">
+                    <TextInput
+                      icon={<At />}
+                      placeholder="Your email"
+                      value={userDescription}
+                      onChange={(e) => setDescription(e.target.value)}
+                      styles={{ rightSection: { pointerEvents: "none" } }}
+                      rightSection={
+                        <Tooltip
+                          label="We do not send spam"
+                          position="top"
+                          placement="end"
+                        >
+                          <AlertCircle
+                            size={16}
+                            style={{ display: "block", opacity: 0.5 }}
+                          />
+                        </Tooltip>
+                      }
+                    />
+                  </InputWrapper>
+                </Accordion.Item>
+                <Accordion.Item label="Images">
+                  <p>Hero</p>
+                  <input type="file" onChange={heroFileSlectedHandler}></input>
+                  <Button onClick={HeroFileUploadhandler}>Upload file</Button>
 
-              <div >
-                <p>Your wallets confirmed collections</p>
-                <p>Select what collection your want to display (max 5)</p>
-                <CustomCollectionSelector selectedCollections={selectedCollections}></CustomCollectionSelector>
-                <Button onClick={() => console.log(selectedCollections)}></Button>
-              </div>
-
-              <p>Hero</p>
-              <input type="file" onChange={heroFileSlectedHandler}></input>
-              <Button onClick={HeroFileUploadhandler}>Upload file</Button>
-
-              <p>Pfp</p>
-              <input type="file" onChange={pfpFileSlectedHandler}></input>
-              <Button onClick={PfpFileUploadhandler}>Upload file</Button>
-
-              <p>Background color picker</p>
-              <CustomColorPicker></CustomColorPicker>
-
-              <br />
-              <br />
+                  <p>Pfp</p>
+                  <input type="file" onChange={pfpFileSlectedHandler}></input>
+                  <Button onClick={PfpFileUploadhandler}>Upload file</Button>
+                </Accordion.Item>
+                <Accordion.Item label="Links"></Accordion.Item>
+                <Accordion.Item label="Collection badges">
+                  <div>
+                    <p>Your wallets confirmed collections</p>
+                    <p>Select what collection your want to display (max 5)</p>
+                    <CustomCollectionSelector
+                      selectedCollections={selectedCollections}
+                      setSelectedCollections={setSelectedCollections}
+                    ></CustomCollectionSelector>
+                  </div>
+                </Accordion.Item>
+                <Accordion.Item label="Colors">
+                  <p>Background color picker</p>
+                  <CustomColorPicker></CustomColorPicker>
+                </Accordion.Item>
+              </Accordion>
               <Button onClick={checkDupes}>Save Profile</Button>
-              <Button onClick={updateObject}>Update Profile</Button>
-              <Link to={"/u/" + userSlug}>
-                <Button>View Profile</Button>
-              </Link>
+
+              <br />
+              <br />
+              <div>
+                <p>Remember to press update after changes</p>
+                <Button onClick={updateObject}>Update Profile</Button>
+                <Link to={"/u/" + userSlug}>
+                  <Button>View Profile</Button>
+                </Link>
+              </div>
             </div>
           </div>
         </Grid.Col>
