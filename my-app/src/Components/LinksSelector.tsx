@@ -4,11 +4,11 @@ import { CurrencyEthereum } from "tabler-icons-react";
 
 type linksSelectorProps = {
   selectedLinks: any;
-  setlinksArr: any,
+  setlinksArr: any;
   setSelectedLinks: any;
 };
 
-var linksArr:any = []
+var linksArr: any = [];
 
 const linksObj = {
   type: "Twitter",
@@ -33,7 +33,7 @@ export default function LinksSelector({
   ];
 
   const getLinks = () => {
-    linksArr = []
+    linksArr = [];
 
     selectedLinks.forEach((e: any) => {
       data.forEach((element) => {
@@ -43,7 +43,7 @@ export default function LinksSelector({
       });
     });
 
-    setlinksArr(linksArr)
+    setlinksArr(linksArr);
   };
 
   return (
@@ -71,10 +71,10 @@ export default function LinksSelector({
         {selectedLinks?.map((element: any, index: any) => {
           return (
             <InputWrapper
-            required
-            key={element}
-            label={element +" URL"}
-            style={{marginBottom:"5px"}}
+              required
+              key={element}
+              label={element + " URL"}
+              style={{ marginBottom: "5px" }}
             >
               <Input
                 icon={<CurrencyEthereum size={16} />}

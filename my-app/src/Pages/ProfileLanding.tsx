@@ -21,7 +21,7 @@ export default function Landing() {
   const [imageHero, setImageHero]: any = useState();
   const [selectedCollections, setSelectedCollections]: any = useState();
 
-  //Link shit
+//Link shit
   const [linksArr, setlinksArr]: any = useState([]);
 
   //Colors
@@ -198,8 +198,8 @@ export default function Landing() {
               <p style={{ margin: "0px" }}>{description}</p>
             </div>
 
-            <div style={{ height: "100%", marginTop: "60px" }}>
-              <div style={{ justifyContent: "end" }}>
+            <div style={{ display:"flex", width:"100%", justifyContent:"center", height: "100%", marginTop: "60px" }}>
+              <div style={{ width: "60%"}}>
                 {linksArr.map((element: any) => {
                   var design = btnDesigns.filter((obj) => {
                     return obj.type === element.type;
@@ -222,7 +222,6 @@ export default function Landing() {
                           height: 52,
                           marginBottom: 10,
                           paddingLeft: 20,
-                          width: "50%",
                           paddingRight: 20,
 
                           "&:hover": {
