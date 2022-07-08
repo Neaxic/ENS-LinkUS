@@ -4,28 +4,20 @@ import { Moralis } from "moralis";
 import { useState, useEffect, useRef } from "react";
 
 import {
-  Tooltip,
   Button,
   Avatar,
   InputWrapper,
   TextInput,
   Accordion,
   Grid,
-  ColorInput,
-  ColorPicker,
 } from "@mantine/core";
 import { Link } from "react-router-dom";
-import {
-  At,
-  AlertCircle,
-  DiscountCheck,
-  GitPullRequestDraft,
-} from "tabler-icons-react";
+import { At, DiscountCheck } from "tabler-icons-react";
 import { storage } from "../firebase";
 import { ref, uploadBytes, listAll, getDownloadURL } from "firebase/storage";
-import { idText } from "typescript";
 import CustomColorPicker from "../Components/CustomColorPicker";
 import CustomCollectionSelector from "../Components/CollectionSelector";
+import LinksSelector from "../Components/LinksSelector";
 
 export default function Settings() {
   var currentUser: any = Moralis.User.current();
@@ -45,6 +37,25 @@ export default function Settings() {
 
   //Collection Selector
   const [selectedCollections, setSelectedCollections]: any = useState(null);
+
+  //Color picker
+  const [selectedBGColor, setSelectedBGColor]: any = useState("#e9e9e9");
+  const [selectedTextColor, setSelectedTextColor]: any = useState("#000000");
+
+  //Links
+  const [selectedLinks, setSelectedLinks] = useState([])
+
+  const colorArr: any = [];
+  const colorObj = {
+    bgcolor: selectedBGColor,
+    textColor: selectedTextColor,
+  };
+
+  const[linksArr, setlinksArr]:any = useState([])
+  const linksObj = {
+    type: "Twitter",
+    link: "www.twitter.com/1CYETH",
+  };
 
   //Fetch myself
   const { fetch } = useMoralisQuery(
@@ -79,6 +90,11 @@ export default function Settings() {
       setDescription(results[0].get("description"));
       setDisplayName(results[0].get("displayName"));
       setSelectedCollections(results[0].get("collections"));
+      setSelectedBGColor(results[0].get("colors")[0].bgcolor);
+      setSelectedTextColor(results[0].get("colors")[0].textColor);
+      console.log("from DB:")
+      console.log(results[0].get("links"))
+      setlinksArr(results[0].get("links"))
       setInstanceSlug(results[0]);
     }
     return results;
@@ -114,10 +130,15 @@ export default function Settings() {
 
   //UPDATE LOGIC
   const updateObject = async () => {
+    colorArr.push(colorObj);
+    console.log(linksArr)
+
     instanceSlug.set("slug", userSlug);
     instanceSlug.set("description", userDescription);
     instanceSlug.set("displayName", userDisplayName);
     instanceSlug.set("collections", selectedCollections);
+    instanceSlug.set("colors", colorArr);
+    instanceSlug.set("links", linksArr);
     instanceSlug.save();
   };
 
@@ -154,7 +175,7 @@ export default function Settings() {
   };
 
   return (
-    <div style={{ backgroundColor: "white" }}>
+    <div style={{ backgroundColor: selectedBGColor, color: selectedTextColor }}>
       <Grid grow>
         <Grid.Col span={3}>
           <div
@@ -169,6 +190,7 @@ export default function Settings() {
                 <img
                   style={{ objectFit: "cover", height: "100vh", width: "100%" }}
                   src={imageHero}
+                  alt="Should have loaded in"
                   width="100%"
                 />
               </div>
@@ -259,18 +281,6 @@ export default function Settings() {
                       value={userDisplayName}
                       onChange={(e) => setDisplayName(e.target.value)}
                       styles={{ rightSection: { pointerEvents: "none" } }}
-                      rightSection={
-                        <Tooltip
-                          label="We do not send spam"
-                          position="top"
-                          placement="end"
-                        >
-                          <AlertCircle
-                            size={16}
-                            style={{ display: "block", opacity: 0.5 }}
-                          />
-                        </Tooltip>
-                      }
                     />
                   </InputWrapper>
 
@@ -281,18 +291,6 @@ export default function Settings() {
                       value={userDescription}
                       onChange={(e) => setDescription(e.target.value)}
                       styles={{ rightSection: { pointerEvents: "none" } }}
-                      rightSection={
-                        <Tooltip
-                          label="We do not send spam"
-                          position="top"
-                          placement="end"
-                        >
-                          <AlertCircle
-                            size={16}
-                            style={{ display: "block", opacity: 0.5 }}
-                          />
-                        </Tooltip>
-                      }
                     />
                   </InputWrapper>
                 </Accordion.Item>
@@ -305,7 +303,9 @@ export default function Settings() {
                   <input type="file" onChange={pfpFileSlectedHandler}></input>
                   <Button onClick={PfpFileUploadhandler}>Upload file</Button>
                 </Accordion.Item>
-                <Accordion.Item label="Links"></Accordion.Item>
+                <Accordion.Item label="Links">
+                  <LinksSelector setlinksArr={setlinksArr} selectedLinks={selectedLinks} setSelectedLinks={setSelectedLinks}/>
+                </Accordion.Item>
                 <Accordion.Item label="Collection badges">
                   <div>
                     <p>Your wallets confirmed collections</p>
@@ -317,8 +317,18 @@ export default function Settings() {
                   </div>
                 </Accordion.Item>
                 <Accordion.Item label="Colors">
-                  <p>Background color picker</p>
-                  <CustomColorPicker></CustomColorPicker>
+                  <div style={{ display: "flex" }}>
+                    <CustomColorPicker
+                      text="Profile background color"
+                      selectedColor={selectedBGColor}
+                      setSelectedColor={setSelectedBGColor}
+                    />
+                    <CustomColorPicker
+                      text="Profile text color"
+                      selectedColor={selectedTextColor}
+                      setSelectedColor={setSelectedTextColor}
+                    />
+                  </div>
                 </Accordion.Item>
               </Accordion>
               <Button onClick={checkDupes}>Save Profile</Button>

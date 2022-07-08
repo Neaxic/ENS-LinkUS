@@ -1,14 +1,13 @@
-import { useMoralisQuery, useNewMoralisObject } from "react-moralis";
-import { useMoralis } from "react-moralis";
-import { Moralis } from "moralis";
+import { useMoralisQuery } from "react-moralis";
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import { Button, Grid, ThemeIcon, Avatar } from "@mantine/core";
+import { Button, Grid, Avatar } from "@mantine/core";
 import {
   BrandTwitter,
   BrandYoutube,
   CurrencyEthereum,
   DiscountCheck,
+  World,
 } from "tabler-icons-react";
 import { storage } from "../firebase";
 import { ref, listAll, getDownloadURL } from "firebase/storage";
@@ -22,9 +21,34 @@ export default function Landing() {
   const [imageHero, setImageHero]: any = useState();
   const [selectedCollections, setSelectedCollections]: any = useState();
 
+  //Link shit
+  const [linksArr, setlinksArr]: any = useState([]);
+
+  //Colors
+  const [selectedBGColor, setSelectedBGColor]: any = useState("#e9e9e9");
+  const [selectedTextColor, setSelectedTextColor]: any = useState("#000000");
+
   useEffect(() => {
     basicQuery();
   }, []);
+
+  const btnDesigns = [
+    {
+      type: "Youtube",
+      color: "#ff0000",
+      icon: "BrandYoutube",
+    },
+    {
+      type: "Opensea",
+      color: "#0000ff",
+      icon: "CurrencyEthereum",
+    },
+    {
+      type: "Twitter",
+      color: "#0000ff",
+      icon: "BrandTwitter",
+    },
+  ];
 
   useEffect(() => {
     const imageHeroRef = ref(storage, `users/${ownerAddr}/hero`);
@@ -60,13 +84,22 @@ export default function Landing() {
       setOwnerAddr(results[0].get("owner"));
       setOwnerDisplayName(results[0].get("displayName"));
       setDescription(results[0].get("description"));
+      setlinksArr(results[0].get("links"));
+
       setSelectedCollections(results[0].get("collections"));
+      if (
+        results[0].get("colors") != null &&
+        results[0].get("colors") != undefined
+      ) {
+        setSelectedBGColor(results[0].get("colors")[0].bgcolor);
+        setSelectedTextColor(results[0].get("colors")[0].textColor);
+      }
     }
     return results;
   };
 
   return (
-    <div>
+    <div style={{ backgroundColor: selectedBGColor, color: selectedTextColor }}>
       <Grid grow>
         <Grid.Col span={3}>
           <div
@@ -81,6 +114,7 @@ export default function Landing() {
                 <img
                   style={{ objectFit: "cover", height: "100vh", width: "100%" }}
                   src={imageHero}
+                  alt="Should have loaded in"
                   width="100%"
                 />
               </div>
@@ -139,91 +173,40 @@ export default function Landing() {
 
             <div style={{ display: "block", marginTop: "60px" }}>
               <div>
-                <Button
-                  component="a"
-                  target="_blank"
-                  size="xl"
-                  rel="noopener noreferrer"
-                  href="https://twitter.com/1CYETH"
-                  leftIcon={<BrandTwitter size={25} />}
-                  styles={(theme) => ({
-                    root: {
-                      backgroundColor: "#00acee",
-                      border: 0,
-                      height: 42,
-                      paddingLeft: 20,
-                      paddingRight: 20,
+                {linksArr.map((element: any) => {
+                  return (
+                    <Button
+                      component="a"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      size="xl"
+                      key={element?.type}
+                      href={element.link}
+                      leftIcon={<CurrencyEthereum size={25} />}
+                      styles={(theme) => ({
+                        root: {
+                          backgroundColor: btnDesigns.filter((obj) => {
+                            return obj.type === element.type;
+                          })[0]?.color,
+                          border: 0,
+                          height: 42,
+                          paddingLeft: 20,
+                          paddingRight: 20,
 
-                      "&:hover": {
-                        backgroundColor: theme.fn.darken("#00acee", 0.05),
-                      },
-                    },
+                          "&:hover": {
+                            backgroundColor: theme.fn.darken("#2289FF", 0.1),
+                          },
+                        },
 
-                    leftIcon: {
-                      marginRight: 15,
-                    },
-                  })}
-                >
-                  Follow on Twitter
-                </Button>
-              </div>
-              <div>
-                <Button
-                  component="a"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  size="xl"
-                  href="https://twitter.com/mantinedev"
-                  leftIcon={<BrandYoutube size={25} />}
-                  styles={(theme) => ({
-                    root: {
-                      backgroundColor: "#FF2222",
-                      border: 0,
-                      height: 42,
-                      paddingLeft: 20,
-                      paddingRight: 20,
-
-                      "&:hover": {
-                        backgroundColor: theme.fn.darken("#FF2222", 0.1),
-                      },
-                    },
-
-                    leftIcon: {
-                      marginRight: 15,
-                    },
-                  })}
-                >
-                  Follow on Youtube
-                </Button>
-              </div>
-              <div>
-                <Button
-                  component="a"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  size="xl"
-                  href="https://twitter.com/mantinedev"
-                  leftIcon={<CurrencyEthereum size={25} />}
-                  styles={(theme) => ({
-                    root: {
-                      backgroundColor: "#2289FF",
-                      border: 0,
-                      height: 42,
-                      paddingLeft: 20,
-                      paddingRight: 20,
-
-                      "&:hover": {
-                        backgroundColor: theme.fn.darken("#2289FF", 0.1),
-                      },
-                    },
-
-                    leftIcon: {
-                      marginRight: 15,
-                    },
-                  })}
-                >
-                  Check my Opensea
-                </Button>
+                        leftIcon: {
+                          marginRight: 15,
+                        },
+                      })}
+                    >
+                      {element.type}
+                    </Button>
+                  );
+                })}
               </div>
             </div>
           </div>

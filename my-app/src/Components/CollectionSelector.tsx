@@ -10,7 +10,6 @@ type CollectionProps = {
 
 export default function CustomCollectionSelector({ selectedCollections, setSelectedCollections }: CollectionProps) {
   const Web3Api = useMoralisWeb3Api();
-  const [selectedList, setSelectedList]: any = useState([]);
   const [personalCollectionList, setPersonalCollectionList]: any = useState([]);
   const currentUser: any = Moralis.User.current();
   var userAddr = currentUser.get("ethAddress");
