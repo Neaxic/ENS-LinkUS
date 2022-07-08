@@ -35,17 +35,36 @@ export default function Landing() {
   const btnDesigns = [
     {
       type: "Youtube",
-      color: "#ff0000",
+      color: "#FF0000",
       icon: "BrandYoutube",
     },
     {
       type: "Opensea",
-      color: "#0000ff",
+      color: "#2081E2",
+      icon: "CurrencyEthereum",
+    },
+    {
+      type: "Discord",
+      color: "#485EF4",
       icon: "CurrencyEthereum",
     },
     {
       type: "Twitter",
-      color: "#0000ff",
+      color: "#1D9BF0",
+      icon: "BrandTwitter",
+    },
+    {
+      type: "Custom",
+      color: "#3D3D3D",
+      icon: "BrandTwitter",
+    },
+    {
+      type: "Etherscan",
+      color: "#21325B",
+      icon: "BrandTwitter",
+    },{
+      type: "Spotify",
+      color: "#1DB954",
       icon: "BrandTwitter",
     },
   ];
@@ -171,9 +190,13 @@ export default function Landing() {
               <p style={{ margin: "0px" }}>{description}</p>
             </div>
 
-            <div style={{ display: "block", marginTop: "60px" }}>
-              <div>
+            <div style={{ height: "100%", marginTop: "60px" }}>
+              <div style={{ justifyContent: "end" }}>
                 {linksArr.map((element: any) => {
+                  var design = btnDesigns.filter((obj) => {
+                    return obj.type === element.type;
+                  })[0];
+
                   return (
                     <Button
                       component="a"
@@ -185,16 +208,17 @@ export default function Landing() {
                       leftIcon={<CurrencyEthereum size={25} />}
                       styles={(theme) => ({
                         root: {
-                          backgroundColor: btnDesigns.filter((obj) => {
-                            return obj.type === element.type;
-                          })[0]?.color,
+                          display: "block",
+                          backgroundColor: design.color,
                           border: 0,
-                          height: 42,
+                          height: 52,
+                          marginBottom: 10,
                           paddingLeft: 20,
+                          width: "50%",
                           paddingRight: 20,
 
                           "&:hover": {
-                            backgroundColor: theme.fn.darken("#2289FF", 0.1),
+                            backgroundColor: theme.fn.darken(design.color, 0.1),
                           },
                         },
 

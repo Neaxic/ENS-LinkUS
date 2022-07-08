@@ -26,6 +26,8 @@ export default function LinksSelector({
     { value: "Etherscan", label: "Etherscan" },
     { value: "Twitter", label: "Twitter" },
     { value: "Youtube", label: "Youtube" },
+    { value: "Discord", label: "Discord" },
+    { value: "Spotify", label: "Spotify" },
   ];
 
   const getLinks = () => {
