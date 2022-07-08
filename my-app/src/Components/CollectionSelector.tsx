@@ -22,6 +22,8 @@ export default function CustomCollectionSelector({ selectedCollections, setSelec
     ["0xbc4ca0eda7647a8ab7c2061c2e118a18a936f13d", "BAYC"],
     ["0x60e4d786628fea6478f785a6d7e704777c86a7c6", "MAYC"],
     ["0x49cf6f5d44e70224e2e23fdcdd2c053f30ada28b", "CLONE X"],
+    ["0xe34c28c7dc4fa20ceb7a9268345e83a5c7060136", "NFTHUD"],
+    ["0x76f3a1ef80a1142f9bd2b868d59ab75a1c0916d4", "AQUAHQ"],
   ]);
 
   useEffect(() => {
