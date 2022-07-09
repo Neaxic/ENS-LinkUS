@@ -27,6 +27,8 @@ export default function LinksSelector({
     { value: "Twitter", label: "Twitter" },
     { value: "Youtube", label: "Youtube" },
     { value: "Discord", label: "Discord" },
+    { value: "Snapchat", label: "Snapchat" },
+    { value: "Linkedin", label: "Linkedin" },
     { value: "Intagram", label: "Intagram" },
     { value: "Tiktok", label: "Tiktok" },
     { value: "Spotify", label: "Spotify" },

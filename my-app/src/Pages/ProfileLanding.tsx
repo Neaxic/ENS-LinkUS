@@ -50,6 +50,14 @@ export default function Landing() {
       type: "Tiktok",
       color: "#000000",
       icon: "CurrencyEthereum",
+    },{
+      type: "Snapchat",
+      color: "#FfFf00",
+      icon: "CurrencyEthereum",
+    },{
+      type: "Linkedin",
+      color: "#0A66C2",
+      icon: "CurrencyEthereum",
     },
     {
       type: "Discord",
@@ -194,12 +202,15 @@ export default function Landing() {
               </div>
             </div>
 
-            <div style={{ textAlign: "left" }}>
-              <p style={{ margin: "0px" }}>{description}</p>
+            <div style={{ textAlign: "left", display:"flex", justifyContent:"center" }}>
+                  <div style={{ width: "50%" }}>
+                  <p style={{ margin: "0px" }}>{description}</p>
+
+                  </div>
             </div>
 
             <div style={{ display:"flex", width:"100%", justifyContent:"center", height: "100%", marginTop: "60px" }}>
-              <div style={{ width: "60%"}}>
+              <div style={{ width: "50%"}}>
                 {linksArr.map((element: any) => {
                   var design = btnDesigns.filter((obj) => {
                     return obj.type === element.type;
