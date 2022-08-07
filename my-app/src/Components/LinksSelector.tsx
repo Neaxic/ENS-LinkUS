@@ -29,7 +29,7 @@ export default function LinksSelector({
     { value: "Discord", label: "Discord" },
     { value: "Snapchat", label: "Snapchat" },
     { value: "Linkedin", label: "Linkedin" },
-    { value: "Intagram", label: "Intagram" },
+    { value: "Instagram", label: "Instagram" },
     { value: "Tiktok", label: "Tiktok" },
     { value: "Spotify", label: "Spotify" },
   ];

@@ -36,7 +36,7 @@ export default function Landing() {
     {
       type: "Youtube",
       color: "#FF0000",
-      icon: "BrandYoutube",
+      icon: "CurrencyEthereum",
     },
     {
       type: "Opensea",
@@ -52,7 +52,7 @@ export default function Landing() {
       icon: "CurrencyEthereum",
     },{
       type: "Snapchat",
-      color: "#FfFf00",
+      color: "#D1D100",
       icon: "CurrencyEthereum",
     },{
       type: "Linkedin",

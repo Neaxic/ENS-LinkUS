@@ -281,6 +281,8 @@ export default function Settings() {
                     />
                   </InputWrapper>
 
+                  <p>Use your linked ENS doamin</p>
+
                   <InputWrapper label="Input Display name">
                     <TextInput
                       icon={<At />}
